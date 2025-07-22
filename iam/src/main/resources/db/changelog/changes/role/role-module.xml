@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- 角色表 -->
+    <changeSet id="role-1" author="iam">
+        <createTable tableName="iam_role">
+            <column name="id" type="BIGINT UNSIGNED" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_code" type="VARCHAR(50)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="role_name" type="VARCHAR(50)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="tenant_id" type="BIGINT UNSIGNED"/>
+            <column name="create_time" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_time" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+            <column name="deleted" type="TINYINT" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="iam_role" indexName="idx_role_code">
+            <column name="role_code"/>
+        </createIndex>
+        <createIndex tableName="iam_role" indexName="idx_role_tenant_id">
+            <column name="tenant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 角色-菜单关联表 -->
+    <changeSet id="role-2" author="iam">
+        <createTable tableName="iam_role_menu">
+            <column name="role_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="menu_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tenant_id" type="BIGINT UNSIGNED"/>
+        </createTable>
+        <addPrimaryKey tableName="iam_role_menu" columnNames="role_id,menu_id" constraintName="pk_role_menu"/>
+        <createIndex tableName="iam_role_menu" indexName="idx_role_menu_role_id">
+            <column name="role_id"/>
+        </createIndex>
+        <createIndex tableName="iam_role_menu" indexName="idx_role_menu_menu_id">
+            <column name="menu_id"/>
+        </createIndex>
+        <createIndex tableName="iam_role_menu" indexName="idx_role_menu_tenant_id">
+            <column name="tenant_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog> 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- 审计日志表 -->
+    <changeSet id="audit-1" author="iam">
+        <createTable tableName="iam_audit_log">
+            <column name="id" type="BIGINT UNSIGNED" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT UNSIGNED"/>
+            <column name="username" type="VARCHAR(50)"/>
+            <column name="operation" type="VARCHAR(100)"/>
+            <column name="method" type="VARCHAR(20)"/>
+            <column name="request_uri" type="VARCHAR(255)"/>
+            <column name="ip" type="VARCHAR(50)"/>
+            <column name="user_agent" type="VARCHAR(255)"/>
+            <column name="status" type="TINYINT"/>
+            <column name="error_msg" type="VARCHAR(255)"/>
+            <column name="tenant_id" type="BIGINT UNSIGNED"/>
+            <column name="create_time" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <createIndex tableName="iam_audit_log" indexName="idx_audit_log_user_id">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex tableName="iam_audit_log" indexName="idx_audit_log_tenant_id">
+            <column name="tenant_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog> 
