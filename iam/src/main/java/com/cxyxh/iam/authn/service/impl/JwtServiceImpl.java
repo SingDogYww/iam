@@ -16,6 +16,8 @@ package com.cxyxh.iam.authn.service.impl;
 import com.cxyxh.iam.authn.dto.JwtTokenDTO;
 import com.cxyxh.iam.authn.service.JwtService;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -112,7 +114,7 @@ public class JwtServiceImpl implements JwtService {
             // 解析令牌
             Jwts.parser()
                 .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(token);
+                .parse(token);
                 
             // 检查令牌是否在黑名单中
             String blacklistKey = "jwt:blacklist:" + token;
@@ -228,9 +230,9 @@ public class JwtServiceImpl implements JwtService {
      * @return 声明
      */
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
+        Jwt<Header, Claims> claimsJwt = Jwts.parser()
                 .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(token)
-                .getBody();
+                .parse(token);
+        return claimsJwt.getBody();
     }
 } 

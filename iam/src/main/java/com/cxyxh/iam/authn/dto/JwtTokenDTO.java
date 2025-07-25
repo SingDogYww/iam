@@ -13,6 +13,7 @@
  */
 package com.cxyxh.iam.authn.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,25 +28,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "JWT令牌")
 public class JwtTokenDTO {
 
-    /**
-     * 访问令牌
-     */
+    @Schema(description = "访问令牌")
     private String accessToken;
-
-    /**
-     * 刷新令牌
-     */
+    
+    @Schema(description = "刷新令牌")
     private String refreshToken;
-
-    /**
-     * 令牌类型
-     */
+    
+    @Schema(description = "令牌类型，Bearer")
     private String tokenType;
-
-    /**
-     * 过期时间（秒）
-     */
-    private long expiresIn;
+    
+    @Schema(description = "过期时间，单位秒")
+    private Long expiresIn;
 } 

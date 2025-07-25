@@ -58,8 +58,16 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor('org.mapstruct:mapstruct-processor:1.6.3')
+    
+    // 测试依赖
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.junit.platform:junit-platform-engine'
+    testImplementation 'org.junit.platform:junit-platform-runner'
+    // H2 内存数据库用于测试
+    testImplementation 'com.h2database:h2'
+    
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -71,4 +79,12 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// 创建API测试任务
+task apiTest(type: JavaExec) {
+    group = 'verification'
+    description = '运行API测试'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.cxyxh.iam.api.ApiTestRunner'
 }
